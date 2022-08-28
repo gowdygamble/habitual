@@ -2,7 +2,7 @@ import React from 'react'
 
 function AddHabitModal() {
   return (
-    <div>AddHabitModal</div>
+    <div>test</div>
   )
 }
 
