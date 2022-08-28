@@ -8,7 +8,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 const HabitCard = styled.div`
     border: 2px solid grey;
     border-radius: 3px;
-    width: 50%;
+    width: 90%;
     text-align: center;
     margin: 4px;
     padding: 10px;

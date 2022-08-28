@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {collection, query, onSnapshot, where, addDoc, updateDoc, doc} from "firebase/firestore"
 import {db} from '../firebase'
 import { PageContainer } from '../component/StyleComponents';
-import HabitInstanceCard from '../component/HabitInstanceCard';
+import DayCategoryBlock from '../component/DayCategoryBlock';
 
 const createDayHabits = async (datestring) => {
   const q = query(collection(db, 'habits'))
@@ -36,6 +36,26 @@ const createDayHabits = async (datestring) => {
 function Today() {
   const [todayHabits, setTodayHabits] = useState([]);
   const [dayId, setDayId] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [habitsByCategory, setHabitsByCategory] = useState({})
+
+  useEffect(() => {
+    const q = query(collection(db, 'categories'))
+    onSnapshot(q, (querySnapshot) => {
+
+      var h = querySnapshot.docs.map(doc => ({
+        name: doc.data().name,
+        order: doc.data().order,
+      }));
+      h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+
+      setCategories(h)
+
+      
+    })
+  },[])
+
+  
 
   const changeStatus = async (habitId, newStatus) => {
     const dayDocRef = doc(db, "days", dayId)
@@ -78,27 +98,49 @@ function Today() {
     })
   }, [])
 
+  const sortHabitsByCategory = (categories, habits) => {
+    const catNames = categories.map(h => h.name)
+    const hByCategory = catNames.reduce((o, cat) => ({ ...o, [cat]: habits.filter(h => h.category === cat)}), {})
+    //console.log(habitsByCategory)
+    setHabitsByCategory(hByCategory)
+  }
+
+  useEffect(() => {
+    sortHabitsByCategory(categories, todayHabits)
+  }, [categories, todayHabits])
+
   var d = new Date();
   const ds = d.toDateString();
 
   //onComplete={handleComplete} 
   //onFail={handleFail} 
+
+  // {todayHabits.map(
+  //   habit => {
+  //     return (
+  //       <HabitInstanceCard 
+  //         key={habit.id} 
+  //         habit={habit} 
+  //         habitId={habit.id} 
+  //         handleStatusChange={changeStatus}
+  //       />
+  //     );
+  // })}
   
   return (
     <PageContainer>
       <h2>{ds}</h2>
-      {todayHabits.map(
-        habit => {
-          return (
-            <HabitInstanceCard 
-              key={habit.id} 
-              habit={habit} 
-              habitId={habit.id} 
-              handleStatusChange={changeStatus}
-            />
-          );
-      })}
       
+      {categories.map(category => {
+            return (
+              <DayCategoryBlock 
+                key={category.name} 
+                category={category} 
+                habits={habitsByCategory[category.name]}
+                changeStatus={changeStatus} 
+                />
+            )
+      })}
     </PageContainer>
   )
 }
