@@ -17,6 +17,7 @@ const HabitCard = styled.div`
 function CurrentHabits() {
 
     const [habits, setHabits] = useState([])
+    const [categories, setCategories] = useState([])
 
     useEffect(() => {
         const q = query(collection(db, 'habits'))
@@ -25,12 +26,41 @@ function CurrentHabits() {
           var h = querySnapshot.docs.map(doc => ({
             name: doc.data().name,
             order: doc.data().order,
+            category: doc.data().category,
           }));
           h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
 
           setHabits(h)
         })
       },[])
+
+      useEffect(() => {
+        const q = query(collection(db, 'categories'))
+        onSnapshot(q, (querySnapshot) => {
+
+          var h = querySnapshot.docs.map(doc => ({
+            name: doc.data().name,
+            order: doc.data().order,
+          }));
+          h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+
+          setCategories(h)
+        })
+      },[])
+
+    // build up object {category: array of habits in that category}
+    // function that takes two arrays: array of habits, array of categories
+    // returns object above
+
+    const sortHabitsByCategory = (categories, habits) => {
+      const catNames = categories.map(h => h.name)
+      const habitsByCategory = catNames.reduce((o, cat) => ({ ...o, [cat]: habits.filter(h => h.category === cat)}), {})
+      console.log(habitsByCategory)
+    }
+
+    
+    console.log(categories)
+    sortHabitsByCategory(categories, habits)
 
     return (
       <PageContainer>

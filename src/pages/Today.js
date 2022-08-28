@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {collection, query, onSnapshot, where, addDoc, updateDoc, doc} from "firebase/firestore"
 import {db} from '../firebase'
-import styled from 'styled-components';
 import { PageContainer } from '../component/StyleComponents';
 import HabitInstanceCard from '../component/HabitInstanceCard';
 
@@ -16,6 +15,7 @@ const createDayHabits = async (datestring) => {
         name: doc.data().name,
         status: 'incomplete',
         order: doc.data().order,
+        category: doc.data().category,
       }]
       );
     }
