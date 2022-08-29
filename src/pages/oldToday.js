@@ -24,6 +24,35 @@ const dayCodes = {
   'Sat' : 'Saturday'
 }
 
+// const createDayHabits = async (datestring) => {
+//   const q = query(collection(db, 'habits'))
+//   await onSnapshot(q, (querySnapshot) => {
+    
+//     const dayHabits = querySnapshot.docs.map(doc => {
+//       return (
+//         [doc.id, {
+//         id: doc.id,
+//         name: doc.data().name,
+//         status: 'incomplete',
+//         order: doc.data().order,
+//         category: doc.data().category,
+//         day: doc.data().day || "not-day-specific"
+//       }]
+//       );
+//     }
+//     )
+//     const dayObj = {
+//       datestring,
+//       habits: Object.fromEntries(dayHabits)
+//     }
+//     // i think this is waht's screwing up the multi day add stuff
+//     // doing this in add snapshot or something
+
+//     addDoc(collection(db, 'days'), dayObj)
+
+//   })
+// }
+
 const createDayHabits = async (datestring) => {
 
   const querySnapshot = await getDocs(collection(db, "habits"));
@@ -57,22 +86,14 @@ const createDayHabits = async (datestring) => {
 }
 
 const deleteDayHabits = async id => {
-  console.log("delete")
   await deleteDoc(doc(db, "days", id));
 }
-
-
 
 function Today() {
   const [todayHabits, setTodayHabits] = useState([]);
   const [dayId, setDayId] = useState('');
   const [categories, setCategories] = useState([]);
   const [habitsByCategory, setHabitsByCategory] = useState({})
-
-  var d = new Date();
-  const ds = d.toDateString();
-  const dayCode = ds.split(/(\s+)/)[0];
-  //console.log(habitsByCategory)
 
   useEffect(() => {
     const q = query(collection(db, 'categories'))
@@ -90,7 +111,23 @@ function Today() {
     })
   },[])
 
-  const getDayHabits = async () => {
+  
+
+  const changeStatus = async (habitId, newStatus) => {
+    const dayDocRef = doc(db, "days", dayId)
+    const dotNotation = "habits." + habitId + ".status"
+    //"habits.KvuOpHW9KLLfDRmv9zsw.status"
+    //console.log(dotNotation)
+    await updateDoc(dayDocRef, {
+      [dotNotation] : newStatus
+    });
+  }
+
+  useEffect(() => {
+
+    var d = new Date();
+    const ds = d.toDateString();
+    //console.log(ds)
     const q = query(collection(db, 'days'), where("datestring", "==", ds))
 
     onSnapshot(q, async (querySnapshot) => {
@@ -106,51 +143,16 @@ function Today() {
         h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
         setTodayHabits(h);
         setDayId(querySnapshot.docs[0].id);
-       }
-  })}
-
-  
-
-  const changeStatus = async (habitId, newStatus) => {
-    const dayDocRef = doc(db, "days", dayId)
-    const dotNotation = "habits." + habitId + ".status"
-    //"habits.KvuOpHW9KLLfDRmv9zsw.status"
-    //console.log(dotNotation)
-    await updateDoc(dayDocRef, {
-      [dotNotation] : newStatus
-    });
-  }
-
-  // useEffect(() => {
-
-  //   var d = new Date();
-  //   const ds = d.toDateString();
-  //   //console.log(ds)
-  //   const q = query(collection(db, 'days'), where("datestring", "==", ds))
-
-  //   onSnapshot(q, async (querySnapshot) => {
-
-  //     //console.log(querySnapshot.docs[0].data())
-
-  //     // if there's a match for today
-  //     // set today's habits equal
-  //     if (querySnapshot.docs && querySnapshot.docs.length) {
-
-  //       let h = querySnapshot.docs[0].data().habits;
-  //       h = Object.keys(h).map(k => h[k])
-  //       h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
-  //       setTodayHabits(h);
-  //       setDayId(querySnapshot.docs[0].id);
-  //     }
-  //     else
-  //     {
-  //       // if there's no match for today
-  //       // create a day object and write it to FB
-  //       console.log("no day found for today, creating one")
-  //       await createDayHabits(ds)
-  //     }
-  //   })
-  // }, [])
+      }
+      else
+      {
+        // if there's no match for today
+        // create a day object and write it to FB
+        console.log("no day found for today, creating one")
+        await createDayHabits(ds)
+      }
+    })
+  }, [])
 
   const sortHabitsByCategory = (categories, habits) => {
     const catNames = categories.map(h => h.name)
@@ -163,18 +165,16 @@ function Today() {
     sortHabitsByCategory(categories, todayHabits)
   }, [categories, todayHabits])
 
-  
+  var d = new Date();
+  const ds = d.toDateString();
+  const dayCode = ds.split(/(\s+)/)[0];
+  //console.log(habitsByCategory)
 
-  const refreshTodayHabits = async () => {
+  const refreshTodayHabits = () => {
     console.log("refresh")
-    if (dayId !== '') {
-      await deleteDayHabits(dayId)
-    }
-    
+    deleteDayHabits(dayId)
     //it seems to create it on its own...
-    await createDayHabits(ds)
-    await getDayHabits()
-    //await addDoc(collection(db, 'days'), {yoyo: "ma"})
+    //createDayHabits(ds)
   }
   
   return (
