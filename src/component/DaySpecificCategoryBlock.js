@@ -27,6 +27,18 @@ const TitleContainer = styled.div`
     align-items: center;
     `;
 
+const DayContainer = styled.div`
+    // border: 1px solid blue;
+    // border-radius: 8px;
+    //margin: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    `;
+
 export const HabitContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -60,13 +72,31 @@ const ModalBackground = styled.div`
     z-index: 10;
   `
 
+//   {habits.map(habit => {
+//     return (
+//         <HabitCard key={habit.name}>
+//             <p>{habit.name}</p>
+//             <CancelIcon onClick={() => deleteHabit(habit)} />
+//         </HabitCard>
+//     )
+// })}
 
+const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ]
 
-function HabitCategoryBlock(props) {
-    const category = props.category
+function DaySpecificCategoryBlock(props) {
+    const category = {name: "Day Specific"}
     const habits = props.habits ?? [];
 
     const [modalOpen, setModalOpen] = useState(false)
+    const [selectedDay, setSelectedDay] = useState('');
 
     const openModal = () => {
       setModalOpen(true)
@@ -74,9 +104,11 @@ function HabitCategoryBlock(props) {
 
     const closeModal = () => {
       setModalOpen(false)
+      setSelectedDay('')
     }
 
-    const addHabit = () => {
+    const addDayHabit = (day) => {
+        setSelectedDay(day);
         openModal()
     }
 
@@ -84,6 +116,9 @@ function HabitCategoryBlock(props) {
         console.log(habit)
         await deleteDoc(doc(db, "habits", habit.id));
     }
+
+    //<HabitContainer>
+    //</HabitContainer>
 
     return (
         <CategoryCard>
@@ -94,25 +129,40 @@ function HabitCategoryBlock(props) {
                         category={category} 
                         maxOrder={props.maxOrder} 
                         handleClose={closeModal}
+                        day={selectedDay}
                     />
                 </div>
             )}
+            
             <TitleContainer>
-                <h3>{category.name}</h3>
-                <AddCircleIcon onClick={addHabit} />
+                <h3>Day Specific</h3>
             </TitleContainer>
-            <HabitContainer>
-                {habits.map(habit => {
-                    return (
-                        <HabitCard key={habit.name}>
-                            <p>{habit.name}</p>
-                            <CancelIcon onClick={() => deleteHabit(habit)} />
-                        </HabitCard>
-                    )
-                })}
-            </HabitContainer>
+            
+            {days.map(day => {
+                
+                return (
+                    <div key={day}>
+                        <DayContainer key={day}>
+                            <h3>{day}</h3>
+                            <AddCircleIcon onClick={() => addDayHabit(day)} />
+                        </DayContainer>
+                        {habits.filter(h => h.day === day).map(habit => {
+                            return (
+                                <HabitCard key={habit.id}>
+                                    <p>{habit.name}</p>
+                                    <CancelIcon onClick={() => deleteHabit(habit)} />
+                                </HabitCard>
+
+                            )}
+                        )}
+                        
+                        
+                    </div>
+                )
+            })}
+            
         </CategoryCard>
     )
 }
 
-export default HabitCategoryBlock
+export default DaySpecificCategoryBlock

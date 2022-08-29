@@ -1,12 +1,32 @@
 import React, {useEffect, useState} from 'react'
-import {collection, query, onSnapshot, where, addDoc, updateDoc, doc} from "firebase/firestore"
+import {collection, query, onSnapshot, where, addDoc, updateDoc, doc, deleteDoc} from "firebase/firestore"
 import {db} from '../firebase'
 import { PageContainer } from '../component/StyleComponents';
 import DayCategoryBlock from '../component/DayCategoryBlock';
+import RefreshIcon from '@mui/icons-material/Refresh';
+
+import styled from 'styled-components';
+
+const TitleRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`
+
+const dayCodes = {
+  'Sun' : 'Sunday',
+  'Mon' : 'Monday',
+  'Tue' : 'Tuesday',
+  'Wed' : 'Wednesday',
+  'Thu' : 'Thursday',
+  'Fri' : 'Friday',
+  'Sat' : 'Saturday'
+}
 
 const createDayHabits = async (datestring) => {
   const q = query(collection(db, 'habits'))
-  onSnapshot(q, (querySnapshot) => {
+  await onSnapshot(q, (querySnapshot) => {
     
     const dayHabits = querySnapshot.docs.map(doc => {
       return (
@@ -16,6 +36,7 @@ const createDayHabits = async (datestring) => {
         status: 'incomplete',
         order: doc.data().order,
         category: doc.data().category,
+        day: doc.data().day || "not-day-specific"
       }]
       );
     }
@@ -27,10 +48,16 @@ const createDayHabits = async (datestring) => {
       datestring,
       habits: Object.fromEntries(dayHabits)
     }
+    // i think this is waht's screwing up the multi day add stuff
+    // doing this in add snapshot or something
 
     addDoc(collection(db, 'days'), dayObj)
 
   })
+}
+
+const deleteDayHabits = async id => {
+  await deleteDoc(doc(db, "days", id));
 }
 
 function Today() {
@@ -111,32 +138,36 @@ function Today() {
 
   var d = new Date();
   const ds = d.toDateString();
+  const dayCode = ds.split(/(\s+)/)[0];
+  //console.log(habitsByCategory)
 
-  //onComplete={handleComplete} 
-  //onFail={handleFail} 
-
-  // {todayHabits.map(
-  //   habit => {
-  //     return (
-  //       <HabitInstanceCard 
-  //         key={habit.id} 
-  //         habit={habit} 
-  //         habitId={habit.id} 
-  //         handleStatusChange={changeStatus}
-  //       />
-  //     );
-  // })}
+  const refreshTodayHabits = () => {
+    console.log("refresh")
+    deleteDayHabits(dayId)
+    //it seems to create it on its own...
+    //createDayHabits(ds)
+  }
   
   return (
     <PageContainer>
-      <h2>{ds}</h2>
+      <TitleRow>
+        <h2 style={{marginRight:20}}>{ds}</h2>
+        <RefreshIcon onClick={refreshTodayHabits} />
+      </TitleRow>
       
       {categories.map(category => {
+            let hh;
+            if (category.name === "Day Specific" && habitsByCategory[category.name]) {
+              hh = habitsByCategory[category.name].filter(h => h.day === dayCodes[dayCode])
+            } else {
+              hh = habitsByCategory[category.name]
+            }
+
             return (
               <DayCategoryBlock 
                 key={category.name} 
                 category={category} 
-                habits={habitsByCategory[category.name]}
+                habits={hh}
                 changeStatus={changeStatus} 
                 />
             )

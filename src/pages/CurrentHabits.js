@@ -5,6 +5,23 @@ import {collection, query, onSnapshot} from "firebase/firestore"
 import {db} from '../firebase'
 
 import HabitCategoryBlock from '../component/HabitCategoryBlock';
+import DaySpecificCategoryBlock from '../component/DaySpecificCategoryBlock';
+
+const CurrentHabitsColumns = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  //align-items: center;
+  justify-content: center;
+  //border: 1px solid green;
+`
+
+const CurrentColumn = styled.div`
+  width: 100%;
+  margin: 10px;
+  //border: 1px solid red;
+  padding: 5px;
+`
 
 
 
@@ -24,6 +41,7 @@ function CurrentHabits() {
             name: doc.data().name,
             order: doc.data().order,
             category: doc.data().category,
+            day: doc.data().day,
           }));
           h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
 
@@ -59,24 +77,39 @@ function CurrentHabits() {
       },[])
     
     const maxOrder = habits.at(-1) ? habits.at(-1).order : 0
+    //console.log(habitsByCategory)
     
     return (
       <PageContainer>
-
-          
-
           <h2>Current Habits</h2>
-          
-          {categories.map(category => {
-            return (
-              <HabitCategoryBlock 
-                key={category.name} 
-                category={category} 
-                habits={habitsByCategory[category.name]} 
+          <CurrentHabitsColumns>
+
+            
+            <CurrentColumn>
+              {categories.map(category => {
+
+                if (category.name !== "Day Specific") {
+                  return (
+                    <HabitCategoryBlock 
+                      key={category.name} 
+                      category={category} 
+                      habits={habitsByCategory[category.name]} 
+                      maxOrder={maxOrder}
+                    />
+                  )
+                } else {
+                  return null;
+                }
+              })}
+            </CurrentColumn>
+            <CurrentColumn>
+              <DaySpecificCategoryBlock
                 maxOrder={maxOrder}
+                habits={habitsByCategory["Day Specific"]} 
               />
-            )
-          })}
+            </CurrentColumn>
+            
+          </CurrentHabitsColumns>
       </PageContainer>
   )
 }

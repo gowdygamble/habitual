@@ -16,6 +16,28 @@ const Modal = styled.div`
     transform: translateX(-50%) translateY(-50%);
 `
 
+const CustomForm = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`
+
+const CustomTextInput = styled.input`
+  margin-right: 10px;
+  width: 200px;
+`
+
+const CustomButton = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid black;
+  color: black;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+`
+
 function AddHabitModal(props) {
 
   const [newHabitName, setNewHabitName] = useState('')
@@ -27,6 +49,7 @@ function AddHabitModal(props) {
           name: newHabitName,
           category: props.category.name,
           order: props.maxOrder+1,
+          day: props.category.name === "Day Specific" ? props.day : "not-day-specific"
       })
 
       setNewHabitName('');
@@ -39,10 +62,10 @@ function AddHabitModal(props) {
 
   return (
     <Modal>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={newHabitName} onChange={handleChange}/>
-        <button>Add Habit</button>
-      </form>
+      <CustomForm >
+        <CustomTextInput type="text" value={newHabitName} onChange={handleChange}/>
+        <CustomButton onClick={handleSubmit}>Add Habit</CustomButton>
+      </CustomForm >
     </Modal>
   )
 }

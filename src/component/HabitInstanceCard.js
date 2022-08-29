@@ -11,7 +11,8 @@ const HabitCard = styled.div`
     width: 90%;
     text-align: center;
     margin: 4px;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
