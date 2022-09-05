@@ -24,35 +24,6 @@ const dayCodes = {
   'Sat' : 'Saturday'
 }
 
-// const createDayHabits = async (datestring) => {
-//   const q = query(collection(db, 'habits'))
-//   await onSnapshot(q, (querySnapshot) => {
-    
-//     const dayHabits = querySnapshot.docs.map(doc => {
-//       return (
-//         [doc.id, {
-//         id: doc.id,
-//         name: doc.data().name,
-//         status: 'incomplete',
-//         order: doc.data().order,
-//         category: doc.data().category,
-//         day: doc.data().day || "not-day-specific"
-//       }]
-//       );
-//     }
-//     )
-//     const dayObj = {
-//       datestring,
-//       habits: Object.fromEntries(dayHabits)
-//     }
-//     // i think this is waht's screwing up the multi day add stuff
-//     // doing this in add snapshot or something
-
-//     addDoc(collection(db, 'days'), dayObj)
-
-//   })
-// }
-
 const createDayHabits = async (datestring) => {
 
   const querySnapshot = await getDocs(collection(db, "habits"));
