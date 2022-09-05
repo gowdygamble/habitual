@@ -121,36 +121,21 @@ function Today() {
     });
   }
 
-  // useEffect(() => {
+  useEffect(() => {
+    const q = query(collection(db, 'days'), where("datestring", "==", ds))
 
-  //   var d = new Date();
-  //   const ds = d.toDateString();
-  //   //console.log(ds)
-  //   const q = query(collection(db, 'days'), where("datestring", "==", ds))
+    onSnapshot(q, async (querySnapshot) => {
 
-  //   onSnapshot(q, async (querySnapshot) => {
+      if (querySnapshot.docs && querySnapshot.docs.length) {
 
-  //     //console.log(querySnapshot.docs[0].data())
-
-  //     // if there's a match for today
-  //     // set today's habits equal
-  //     if (querySnapshot.docs && querySnapshot.docs.length) {
-
-  //       let h = querySnapshot.docs[0].data().habits;
-  //       h = Object.keys(h).map(k => h[k])
-  //       h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
-  //       setTodayHabits(h);
-  //       setDayId(querySnapshot.docs[0].id);
-  //     }
-  //     else
-  //     {
-  //       // if there's no match for today
-  //       // create a day object and write it to FB
-  //       console.log("no day found for today, creating one")
-  //       await createDayHabits(ds)
-  //     }
-  //   })
-  // }, [])
+        let h = querySnapshot.docs[0].data().habits;
+        h = Object.keys(h).map(k => h[k])
+        h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+        setTodayHabits(h);
+        setDayId(querySnapshot.docs[0].id);
+      }
+    })
+  }, [])
 
   const sortHabitsByCategory = (categories, habits) => {
     const catNames = categories.map(h => h.name)

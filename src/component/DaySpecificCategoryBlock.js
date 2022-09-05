@@ -135,7 +135,7 @@ function DaySpecificCategoryBlock(props) {
             )}
             
             <TitleContainer>
-                <h3>Day Specific</h3>
+                <h2>Day Specific</h2>
             </TitleContainer>
             
             {days.map(day => {
