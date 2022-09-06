@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {collection, query, onSnapshot, where, addDoc, updateDoc, doc, deleteDoc, getDocs} from "firebase/firestore"
+import {collection, query, onSnapshot, where, addDoc, setDoc, updateDoc, doc, deleteDoc, getDocs} from "firebase/firestore"
 import {db} from '../firebase'
 import { PageContainer } from '../component/StyleComponents';
 import DayCategoryBlock from '../component/DayCategoryBlock';
@@ -51,7 +51,8 @@ const createDayHabits = async (datestring) => {
   // i think this is waht's screwing up the multi day add stuff
   // doing this in add snapshot or something
 
-  await addDoc(collection(db, 'days'), dayObj)
+  //await addDoc(collection(db, 'days'), dayObj)
+  await setDoc(doc(db, "days", datestring), dayObj);
 
   
 }
