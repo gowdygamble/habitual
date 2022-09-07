@@ -4,6 +4,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddHabitModal from './AddHabitModal';
 import CancelIcon from '@mui/icons-material/Cancel';
 
+import HabitCard from './HabitCard';
+
 import {doc, deleteDoc} from "firebase/firestore"
 import {db} from '../firebase'
 
@@ -47,21 +49,6 @@ export const HabitContainer = styled.div`
     
 `;
 
-
-const HabitCard = styled.div`
-    border: 2px solid grey;
-    border-radius: 3px;
-    width: 90%;
-    text-align: center;
-    margin: 4px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
-`;
-
 const ModalBackground = styled.div`
     width: 100%;
     height: 100%;
@@ -71,15 +58,6 @@ const ModalBackground = styled.div`
     left: 0;
     z-index: 10;
   `
-
-//   {habits.map(habit => {
-//     return (
-//         <HabitCard key={habit.name}>
-//             <p>{habit.name}</p>
-//             <CancelIcon onClick={() => deleteHabit(habit)} />
-//         </HabitCard>
-//     )
-// })}
 
 const days = [
     'Sunday',

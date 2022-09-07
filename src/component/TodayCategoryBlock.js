@@ -1,13 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import HabitInstanceCard from './HabitInstanceCard';
+import HabitCard from './HabitCard';
+
+import EditStatusSegment from './EditStatusSegment';
 
 const CategoryCard = styled.div`
     border: 2px solid grey;
     border-radius: 8px;
     width: 70%;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     `;
 
 const TitleContainer = styled.div`
@@ -31,7 +33,7 @@ export const HabitContainer = styled.div`
 `;
 
 
-function DayCategoryBlock(props) {
+function TodayCategoryBlock(props) {
     const category = props.category
     const habits = props.habits ?? [];
 
@@ -43,12 +45,10 @@ function DayCategoryBlock(props) {
             <HabitContainer>
                 {habits.map(habit => {
                     return (
-                        <HabitInstanceCard 
-                                key={habit.id} 
-                                habit={habit} 
-                                habitId={habit.id} 
-                                handleStatusChange={props.changeStatus}
-                              />
+                        <HabitCard key={habit.id} status={habit.status}>
+                            <p>{habit.name}</p>
+                            <EditStatusSegment handleStatusChange={props.changeStatus} habitId={habit.id}/>
+                        </HabitCard> 
                     )
                 })}
             </HabitContainer>
@@ -56,4 +56,4 @@ function DayCategoryBlock(props) {
     )
 }
 
-export default DayCategoryBlock
+export default TodayCategoryBlock

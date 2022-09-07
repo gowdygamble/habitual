@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {collection, query, onSnapshot, where, addDoc, setDoc, updateDoc, doc, deleteDoc, getDocs} from "firebase/firestore"
 import {db} from '../firebase'
 import { PageContainer } from '../component/StyleComponents';
-import DayCategoryBlock from '../component/DayCategoryBlock';
+import TodayCategoryBlock from '../component/TodayCategoryBlock';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import styled from 'styled-components';
@@ -179,7 +179,7 @@ function Today() {
             }
 
             return (
-              <DayCategoryBlock 
+              <TodayCategoryBlock 
                 key={category.name} 
                 category={category} 
                 habits={hh}

@@ -7,6 +7,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import {doc, deleteDoc} from "firebase/firestore"
 import {db} from '../firebase'
 
+import HabitCard from './HabitCard';
+
 const CategoryCard = styled.div`
     border: 2px solid grey;
     border-radius: 8px;
@@ -35,20 +37,6 @@ export const HabitContainer = styled.div`
     
 `;
 
-
-const HabitCard = styled.div`
-    border: 2px solid grey;
-    border-radius: 3px;
-    width: 90%;
-    text-align: center;
-    margin: 4px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
-`;
 
 const ModalBackground = styled.div`
     width: 100%;
