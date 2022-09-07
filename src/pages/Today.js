@@ -28,7 +28,7 @@ const createDayHabits = async (datestring) => {
 
   const querySnapshot = await getDocs(collection(db, "habits"));
   
-
+  // filter here by day specificty
     
   const dayHabits = querySnapshot.docs.map(doc => {
       return (
