@@ -9,23 +9,26 @@ const NavHeaderStyled = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-`;
-
-const NavContainer = styled.div`
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  
 `;
 
 const TitleContainer = styled.div`
   //display: flex;
   //justify-content: center;
+  margin: 4px;
+  margin-left:16px;
+`;
+
+const NavContainer = styled.div`
+  //padding: 0;
+  //margin: 0;
+  height:85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-right:16px;
+  
+  
 `;
 
 const StyledLink = styled(NavLink)`
@@ -34,8 +37,9 @@ const StyledLink = styled(NavLink)`
     font-size: 20px;
     display: flex;
     padding: 0.25rem;
-    align-items: stretch;
-    
+    height: 100%;
+    align-items: center;
+    font-size:22px;
     &.active {
         background-color: #dbdbdb;
         color: black;
