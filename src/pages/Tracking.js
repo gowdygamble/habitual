@@ -3,10 +3,15 @@ import { PageContainer } from '../component/StyleComponents'
 import {db} from '../firebase'
 import {collection, query, onSnapshot, doc,  getDocs} from "firebase/firestore"
 
+import HabitCard from '../component/HabitCard'
+
 
 function Tracking() {
 
   const [days, setDays] = useState([]);
+  const [weeks, setWeeks] = useState([]);
+
+
 
   useEffect(() => {
     const q = query(collection(db, 'days'))
@@ -26,16 +31,45 @@ function Tracking() {
     })
   }, [])
 
+  useEffect(() => {
+
+  }, [days])
+
   console.log(days)
+  //<EditStatusSegment handleStatusChange={props.changeStatus} habitId={habit.id}/>
+
+  
+  // this is including all day specific...
+  // also want it to be by week
+  // way too tall if theyre all stacked
+  // break it down by 7                        
 
   return (
     <PageContainer>
       <h2>Tracking</h2>
+      <div style={{display:'flex', flexDirection: 'row', gap: '6px', padding:'20px'}}>
+      
       {days.map(d => {
+
+        const habits = Object.keys(d.habits).map(habitID => {
+          return d.habits[habitID];
+        })
+
+        habits.sort((a, b) => parseInt(a.order) - parseInt(b.order))
         return (
-          <h3>{d.datestring}</h3>
+          <div key={d.datestring}>
+            <h3>{d.datestring}</h3>
+            {habits.map(habit => {
+                      return (
+                          <HabitCard key={habit.id} status={habit.status}>
+                              <p>{habit.name}</p>
+                          </HabitCard> 
+                      )
+            })}
+          </div>
         )
       })}
+      </div>
     </PageContainer>
   )
 }
