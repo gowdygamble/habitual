@@ -26,15 +26,16 @@ const dayCodes = {
 
 const createDayHabits = async (datestring) => {
 
-  const querySnapshot = await getDocs(collection(db, "habits"));
-  
   // filter here by day specificty
+  console.log("filtering")
   const dayCode = datestring.split(/(\s+)/)[0];
   const dayName = dayCodes[dayCode]
+
+  const q = query(collection(db, "habits"), where("day", 'in', ["not-day-specific", dayName] ));
+  const querySnapshot = await getDocs(q);
+  
     
   const dayHabits = querySnapshot.docs.map(doc => {
-    
-    if (doc.data().day === "not-day-specific" || doc.data().day === dayName) {
       return (
         [doc.id, {
         id: doc.id,
@@ -45,7 +46,6 @@ const createDayHabits = async (datestring) => {
         day: doc.data().day || "not-day-specific"
       }]
       );
-    }
     
     }
   )
