@@ -44,6 +44,11 @@ function Tracking() {
   // way too tall if theyre all stacked
   // break it down by 7                        
 
+  // break into array of weeks
+  //then display a row for each week
+  // how to start the weeks
+  // how to fill in missing days?
+
   return (
     <PageContainer>
       <h2>Tracking</h2>
