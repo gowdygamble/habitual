@@ -5,6 +5,8 @@ import AddHabitModal from './AddHabitModal';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import HabitCard from './HabitCard';
+import OrderChangeBox from './OrderChangeBox';
+import { HandleStatusSwap } from '../functions/FirebaseHelperFunctions';
 
 import {doc, deleteDoc} from "firebase/firestore"
 import {db} from '../firebase'
@@ -48,6 +50,15 @@ export const HabitContainer = styled.div`
     align-items: center;
     
 `;
+
+const HabitControlBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    * {
+       margin-left: 5px;
+    }
+`
 
 const ModalBackground = styled.div`
     width: 100%;
@@ -124,11 +135,25 @@ function DaySpecificCategoryBlock(props) {
                             <h3>{day}</h3>
                             <AddCircleIcon onClick={() => addDayHabit(day)} />
                         </DayContainer>
-                        {habits.filter(h => h.day === day).map(habit => {
+                        {habits.filter(h => h.day === day).map((habit, index) => {
+                            let upindex = index - 1;
+                            if (upindex < 0) { upindex = 0}
+                            let downindex = index + 1;
+                            if (downindex === habits.length) { downindex = habits.length - 1}
+        
+                            let upHabit = habits[upindex]
+                            let downHabit = habits[downindex]
+                            
                             return (
                                 <HabitCard key={habit.id}>
                                     <p>{habit.name}</p>
-                                    <CancelIcon onClick={() => deleteHabit(habit)} />
+                                    <HabitControlBox>
+                                        <CancelIcon onClick={() => deleteHabit(habit)} />
+                                        <OrderChangeBox 
+                                            upHandler={() => {HandleStatusSwap(habit, upHabit)}}
+                                            downHandler={() => {HandleStatusSwap(downHabit, habit)}}
+                                        />
+                                    </HabitControlBox>
                                 </HabitCard>
 
                             )}

@@ -8,6 +8,9 @@ import {doc, deleteDoc} from "firebase/firestore"
 import {db} from '../firebase'
 
 import HabitCard from './HabitCard';
+import OrderChangeBox from './OrderChangeBox';
+
+import { HandleStatusSwap } from '../functions/FirebaseHelperFunctions';
 
 const CategoryCard = styled.div`
     border: 2px solid grey;
@@ -36,6 +39,15 @@ export const HabitContainer = styled.div`
     align-items: center;
     
 `;
+
+const HabitControlBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    * {
+       margin-left: 5px;
+    }
+`
 
 
 const ModalBackground = styled.div`
@@ -90,11 +102,27 @@ function HabitCategoryBlock(props) {
                 <AddCircleIcon onClick={addHabit} />
             </TitleContainer>
             <HabitContainer>
-                {habits.map(habit => {
+                {habits.map((habit, index) => {
+                    let upindex = index - 1;
+                    if (upindex < 0) { upindex = 0}
+                    let downindex = index + 1;
+                    if (downindex === habits.length) { downindex = habits.length - 1}
+
+                    let upHabit = habits[upindex]
+                    let downHabit = habits[downindex]
+
+                    //console.log(upHabit)
+
                     return (
                         <HabitCard key={habit.name}>
                             <p>{habit.name}</p>
-                            <CancelIcon onClick={() => deleteHabit(habit)} />
+                            <HabitControlBox>
+                                <CancelIcon onClick={() => deleteHabit(habit)} />
+                                <OrderChangeBox 
+                                    upHandler={() => {HandleStatusSwap(habit, upHabit)}}
+                                    downHandler={() => {HandleStatusSwap(downHabit, habit)}}
+                                />
+                            </HabitControlBox>
                         </HabitCard>
                     )
                 })}
