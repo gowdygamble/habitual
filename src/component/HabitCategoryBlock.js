@@ -3,12 +3,14 @@ import styled from 'styled-components'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddHabitModal from './AddHabitModal';
 import CancelIcon from '@mui/icons-material/Cancel';
+import EditIcon from '@mui/icons-material/Edit';
 
 import {doc, deleteDoc} from "firebase/firestore"
 import {db} from '../firebase'
 
 import HabitCard from './HabitCard';
 import OrderChangeBox from './OrderChangeBox';
+import UpdateHabitModal from './UpdateHabitModal';
 
 import { HandleStatusSwap } from '../functions/FirebaseHelperFunctions';
 
@@ -67,6 +69,8 @@ function HabitCategoryBlock(props) {
     const habits = props.habits ?? [];
 
     const [modalOpen, setModalOpen] = useState(false)
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const [editingHabit, setEditingHabit] = useState()
 
     const openModal = () => {
       setModalOpen(true)
@@ -74,6 +78,8 @@ function HabitCategoryBlock(props) {
 
     const closeModal = () => {
       setModalOpen(false)
+      setEditModalOpen(false)
+      setEditingHabit(null)
     }
 
     const addHabit = () => {
@@ -97,6 +103,17 @@ function HabitCategoryBlock(props) {
                     />
                 </div>
             )}
+            {editModalOpen && (
+                <div>
+                    <ModalBackground onClick={closeModal}></ModalBackground>
+                    <UpdateHabitModal 
+                        category={category} 
+                        maxOrder={props.maxOrder} 
+                        handleClose={closeModal}
+                        habit={editingHabit}
+                    />
+                </div>
+            )}
             <TitleContainer>
                 <h3>{category.name}</h3>
                 <AddCircleIcon onClick={addHabit} />
@@ -117,6 +134,10 @@ function HabitCategoryBlock(props) {
                         <HabitCard key={habit.name}>
                             <p>{habit.name}</p>
                             <HabitControlBox>
+                                <EditIcon onClick={() => {
+                                    setEditingHabit(habit)
+                                    setEditModalOpen(true)
+                                }} />
                                 <CancelIcon onClick={() => deleteHabit(habit)} />
                                 <OrderChangeBox 
                                     upHandler={() => {HandleStatusSwap(habit, upHabit)}}

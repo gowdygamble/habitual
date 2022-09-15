@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import {db} from '../firebase'
-import {collection, addDoc, Timestamp} from 'firebase/firestore'
+import {collection, addDoc, Timestamp, setDoc, doc} from 'firebase/firestore'
 
 const Modal = styled.div`
     position: fixed;
@@ -43,20 +43,16 @@ const CustomButton = styled.button`
   padding: 0.25em 1em;
 `
 
-function AddHabitModal(props) {
+function UpdateHabitModal(props) {
 
-  const [newHabitName, setNewHabitName] = useState('')
+  const [newHabitName, setNewHabitName] = useState(props.habit.name)
 
   const handleSubmit = async event => {
       event.preventDefault();
 
       if (newHabitName !== '') {
-        await addDoc(collection(db, 'habits'), {
-            name: newHabitName,
-            category: props.category.name,
-            order: props.maxOrder+1,
-            day: props.category.name === "Day Specific" ? props.day : "not-day-specific"
-        })
+        await setDoc(doc(db, 'habits', props.habit.id), {
+            name: newHabitName}, {merge: true})
       }
 
       setNewHabitName('');
@@ -71,10 +67,10 @@ function AddHabitModal(props) {
     <Modal>
       <CustomForm >
         <CustomTextInput type="text" value={newHabitName} onChange={handleChange}/>
-        <CustomButton onClick={handleSubmit}>Add Habit</CustomButton>
+        <CustomButton onClick={handleSubmit}>Update Habit</CustomButton>
       </CustomForm >
     </Modal>
   )
 }
 
-export default AddHabitModal
+export default UpdateHabitModal
