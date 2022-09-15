@@ -32,10 +32,15 @@ function Tracking() {
   }, [])
 
   useEffect(() => {
-
+    let w = []
+    while (days.length) {
+      w.push(days.splice(0, 5));
+    }
+    setWeeks(w)
   }, [days])
 
-  console.log(days)
+  //console.log(days)
+  //console.log(weeks)
   //<EditStatusSegment handleStatusChange={props.changeStatus} habitId={habit.id}/>
 
   
@@ -49,31 +54,48 @@ function Tracking() {
   // how to start the weeks
   // how to fill in missing days?
 
+
+  
+
   return (
     <PageContainer>
       <h2>Tracking</h2>
-      <div style={{display:'flex', flexDirection: 'row', gap: '6px', padding:'20px'}}>
+      <div style={{display:'flex', 
+      flexDirection:'column', 
+      gap: '6px', 
+      padding:'20px',
+      justifyContent: 'left'}}>
       
-      {days.map(d => {
-
-        const habits = Object.keys(d.habits).map(habitID => {
-          return d.habits[habitID];
-        })
-
-        habits.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+      {weeks.map(week => {
         return (
-          <div key={d.datestring}>
-            <h3>{d.datestring}</h3>
-            {habits.map(habit => {
-                      return (
-                          <HabitCard key={habit.id} status={habit.status}>
-                              <p>{habit.name}</p>
-                          </HabitCard> 
-                      )
-            })}
-          </div>
-        )
-      })}
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+        {  week.map(d => {
+
+            const habits = Object.keys(d.habits).map(habitID => {
+              return d.habits[habitID];
+            })
+        
+            habits.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+            return (
+              <div key={d.datestring}>
+                <h3>{d.datestring}</h3>
+                {habits.map(habit => {
+                          return (
+                              <HabitCard key={habit.id} status={habit.status}>
+                                  <p>{habit.name}</p>
+                              </HabitCard> 
+                          )
+                })}
+              </div>
+            )
+        
+            
+            
+          })
+        }</div>
+      )})}
+
+      
       </div>
     </PageContainer>
   )
