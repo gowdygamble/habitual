@@ -56,8 +56,6 @@ const createDayHabits = async (datestring) => {
   }
   // i think this is waht's screwing up the multi day add stuff
   // doing this in add snapshot or something
-
-  //await addDoc(collection(db, 'days'), dayObj)
   await setDoc(doc(db, "days", datestring), dayObj);
 
   
@@ -79,7 +77,6 @@ function Today() {
   var d = new Date();
   const ds = d.toDateString();
   const dayCode = ds.split(/(\s+)/)[0];
-  //console.log(habitsByCategory)
 
   useEffect(() => {
     const q = query(collection(db, 'categories'))
@@ -101,9 +98,6 @@ function Today() {
     const q = query(collection(db, 'days'), where("datestring", "==", ds))
 
     onSnapshot(q, async (querySnapshot) => {
-
-      //console.log(querySnapshot.docs[0].data())
-
       // if there's a match for today
       // set today's habits equal
       if (querySnapshot.docs && querySnapshot.docs.length) {

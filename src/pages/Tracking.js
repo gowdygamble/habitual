@@ -41,15 +41,7 @@ function Tracking() {
     setWeeks(w)
   }, [days])
 
-  //console.log(days)
-  //console.log(weeks)
-  //<EditStatusSegment handleStatusChange={props.changeStatus} habitId={habit.id}/>
-
-  
-  // this is including all day specific...
-  // also want it to be by week
-  // way too tall if theyre all stacked
-  // break it down by 7                        
+  // also want it to be by week           
 
   // break into array of weeks
   //then display a row for each week
