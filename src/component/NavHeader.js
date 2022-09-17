@@ -12,10 +12,15 @@ const NavHeaderStyled = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  //display: flex;
-  //justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   margin: 4px;
   margin-left:16px;
+  * {
+    margin-right: 8px;
+  }
 `;
 
 const NavContainer = styled.div`
@@ -27,6 +32,7 @@ const NavContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   margin-right:16px;
+  margin-left: 16px;
   
   
 `;
@@ -55,6 +61,10 @@ function NavHeader() {
     <NavHeaderStyled>
         <TitleContainer>
             <h1>habitual</h1>
+            <NavContainer>
+              <StyledLink to="/login">Log In</StyledLink> 
+              <StyledLink to="/sign-up">Sign Up</StyledLink> 
+            </NavContainer>
         </TitleContainer>
         <NavContainer>
             <StyledLink to="/today">Today</StyledLink> 
