@@ -1,0 +1,23 @@
+import {CognitoUserPool} from 'amazon-cognito-identity-js';
+
+const POOL_DATA = {
+    UserPoolId: 'us-west-1_gmOHe0HWR',
+	ClientId: '62jg669ceo17n1dan9e7propqc', 
+}
+
+const userPool = new CognitoUserPool(POOL_DATA);
+
+export const SignUpUser = (username, password) => {
+    const attributeList = [];
+    userPool.signUp(username, password, attributeList, null, function(
+        err,
+        result
+    ) {
+        if (err) {
+            alert(err.message || JSON.stringify(err));
+            return;
+        }
+        var cognitoUser = result.user;
+        console.log('user name is ' + cognitoUser.getUsername());
+    });
+}
