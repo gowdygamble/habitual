@@ -10,7 +10,7 @@ import Today from './pages/Today';
 import CurrentHabits from './pages/CurrentHabits';
 import Tracking from './pages/Tracking';
 
-import { store } from './store';
+import { store } from './store/index';
 import { Provider } from 'react-redux';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';

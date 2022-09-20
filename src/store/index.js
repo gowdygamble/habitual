@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import todayReducer from './features/today/todaySlice';
+import { authSlice } from "./AuthSlice";
 
 export const store = configureStore({
     reducer: {
-        today: todayReducer,
-    },
+        auth: authSlice.reducer
+    }
 });

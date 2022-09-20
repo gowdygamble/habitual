@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { CustomForm, CustomButton, CustomTextInput, PageContainer} from '../component/StyleComponents';
 import { LoginUser, logout } from '../functions/CognitoLogic';
 
+import { useDispatch } from 'react-redux';
+import { authActions } from '../store/AuthSlice';
+
 const SignUpCustomForm = styled(CustomForm)`
 * {
   margin: 5px;
@@ -20,16 +23,27 @@ const FormFieldContainer = styled.div`
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const LoginSubmitHandler = (event) => {
+  const dispatchLogin = () => {
+    dispatch(authActions.signIn({username: username}))
+    navigate("/today");
+  }
+
+  const LoginSubmitHandler = async (event) => {
       event.preventDefault();
       
-      LoginUser(username, password)
+      const loginResult = await LoginUser(username, password, dispatchLogin)
+      // console.log("loginResult ", loginResult)
+      // if (loginResult === "success") {
+      //   console.log("dispatching login action to redux")
+      //   dispatch(authActions.signIn({username: username}))
+      //   navigate("/today");
+      // }
       
-      navigate("/today");
 
       setUsername('');
       setPassword('');

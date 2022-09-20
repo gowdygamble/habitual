@@ -4,6 +4,10 @@ import {
     CognitoUser
 } from 'amazon-cognito-identity-js';
 
+
+
+
+
 const POOL_DATA = {
     UserPoolId: 'us-west-1_gmOHe0HWR',
 	ClientId: '62jg669ceo17n1dan9e7propqc', 
@@ -35,7 +39,7 @@ export const SignUpUser = (username, password) => {
     });
 }
 
-export const LoginUser = (username, password) => {
+export const LoginUser = (username, password, dispatchHandler) => {
     var authenticationData = {
         Username: username,
         Password: password,
@@ -54,6 +58,7 @@ export const LoginUser = (username, password) => {
     cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess(result) {
             console.log(result)
+            dispatchHandler();
         },
         onFailure(err) {
             console.log(err)

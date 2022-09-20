@@ -1,6 +1,7 @@
 [] use redux to manage logged in state
 
 [] fix navbar logged-in display + content pages shouldnt show if not logged in...
+
 [] seperate backend from front end:
     all frontend pieces should just expect a list of habits or days or whatever, all the database calls should be done in a seperate
     functions file. the real test is: can I switch easily between aws and firebase?

@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components';
 
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { GetAuthenticatedUser, logout } from '../functions/CognitoLogic';
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../store/AuthSlice';
 
 const NavHeaderStyled = styled.div`
     background-color: #5e5e5e;
@@ -58,26 +60,31 @@ const StyledLink = styled(NavLink)`
 `;
 
 function NavHeader() {
+  const authenticated = useSelector((state) => state.auth.authenticated)
+  const username = useSelector((state) => state.auth.username)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [loggedIn, setLoggedIn] = useState(false)
-
-  useEffect(() => {
-    const user = GetAuthenticatedUser();
-    if (user) {
-      setLoggedIn(true)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const user = GetAuthenticatedUser();
+  //   if (user) {
+  //     setLoggedIn(true)
+  //   }
+  // }, [])
 
   const logoutHandler = () => {
     logout()
-    setLoggedIn(false)
+    //setLoggedIn(false)
+    dispatch(authActions.signOut())
+    navigate("/login")
   }
 
   return (
     <NavHeaderStyled>
         <TitleContainer>
             <h1>habitual</h1>
-            {loggedIn && (<NavContainer>
+            {username && <h1>{username}</h1>}
+            {authenticated && (<NavContainer>
               <StyledLink to="/today">Today</StyledLink> 
               <StyledLink to="/current-habits">Current Habits</StyledLink>
               <StyledLink to="/tracking">Tracking</StyledLink>
@@ -85,7 +92,7 @@ function NavHeader() {
             )}
         </TitleContainer>
         
-          { loggedIn ? (
+          { authenticated ? (
             <NavContainer>
               <p style={{'fontSize': '20px'}} onClick={logoutHandler}>Logout</p>
             </NavContainer>
