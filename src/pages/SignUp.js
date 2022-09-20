@@ -1,5 +1,22 @@
 import React, {useState} from 'react'
 import { SignUpUser } from '../functions/CognitoLogic';
+import styled from 'styled-components';
+
+import { CustomForm, CustomButton, CustomTextInput, PageContainer} from '../component/StyleComponents';
+
+
+const SignUpCustomForm = styled(CustomForm)`
+* {
+  margin: 5px;
+}
+`
+
+const FormFieldContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
 
 function SignUp() {
 
@@ -8,7 +25,7 @@ function SignUp() {
 
     const SignUpSubmitHandler = (event) => {
         event.preventDefault();
-        console.log(username, password)
+        //console.log(username, password)
         SignUpUser(username, password);
         setUsername('');
         setPassword('');
@@ -17,18 +34,26 @@ function SignUp() {
     // how will the cognito password requirments be imposed?
     // 6 characters minimum, special characters etc.
 
+    // add field labels + spacing
 
     return (
-    <div>
-        <div>SignUp</div>
-        <form onSubmit={SignUpSubmitHandler}>
-            <input type="text" id="username" name="username" value={username}
-                onChange={e => setUsername(e.target.value)}/>
-            <input type="password" id="password" name="password" value={password}
-                onChange={e => setPassword(e.target.value)}/>
-            <button>Sign Up</button>
-        </form>
-    </div>
+    <PageContainer>
+        <h2>Create an Account</h2>
+        <SignUpCustomForm onSubmit={SignUpSubmitHandler}>
+          <FormFieldContainer>
+            <h3>Username</h3>
+            <CustomTextInput type="text" id="username" name="username" value={username}
+                  onChange={e => setUsername(e.target.value)}/>
+          </FormFieldContainer>
+          <FormFieldContainer>
+            <h3>Password</h3>
+            <CustomTextInput type="password" id="password" name="password" value={password}
+                  onChange={e => setPassword(e.target.value)} />
+          </FormFieldContainer>
+          <CustomButton type="submit">Sign Up</CustomButton>
+        </SignUpCustomForm>
+        
+    </PageContainer>
     )
 }
 

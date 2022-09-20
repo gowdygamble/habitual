@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components';
 
 import { Link, NavLink } from 'react-router-dom';
+import { GetAuthenticatedUser, logout } from '../functions/CognitoLogic';
 
 const NavHeaderStyled = styled.div`
     background-color: #5e5e5e;
@@ -57,20 +58,45 @@ const StyledLink = styled(NavLink)`
 `;
 
 function NavHeader() {
+
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const user = GetAuthenticatedUser();
+    if (user) {
+      setLoggedIn(true)
+    }
+  }, [])
+
+  const logoutHandler = () => {
+    logout()
+    setLoggedIn(false)
+  }
+
   return (
     <NavHeaderStyled>
         <TitleContainer>
             <h1>habitual</h1>
+            {loggedIn && (<NavContainer>
+              <StyledLink to="/today">Today</StyledLink> 
+              <StyledLink to="/current-habits">Current Habits</StyledLink>
+              <StyledLink to="/tracking">Tracking</StyledLink>
+              </NavContainer>
+            )}
+        </TitleContainer>
+        
+          { loggedIn ? (
+            <NavContainer>
+              <p style={{'fontSize': '20px'}} onClick={logoutHandler}>Logout</p>
+            </NavContainer>
+          ) : (
             <NavContainer>
               <StyledLink to="/login">Log In</StyledLink> 
               <StyledLink to="/sign-up">Sign Up</StyledLink> 
             </NavContainer>
-        </TitleContainer>
-        <NavContainer>
-            <StyledLink to="/today">Today</StyledLink> 
-            <StyledLink to="/current-habits">Current Habits</StyledLink>
-            <StyledLink to="/tracking">Tracking</StyledLink>
-        </NavContainer>
+          )}
+          
+        
     </NavHeaderStyled>
   )
 }

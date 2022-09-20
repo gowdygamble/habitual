@@ -7,6 +7,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 import styled from 'styled-components';
 
+import { GetAuthenticatedUser } from '../functions/CognitoLogic';
+
 const TitleRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -93,6 +95,11 @@ function Today() {
       
     })
   },[])
+
+  useEffect(() => {
+    const user = GetAuthenticatedUser();
+    console.log(user)
+  }, [])
 
   const getDayHabits = async () => {
     const q = query(collection(db, 'days'), where("datestring", "==", ds))

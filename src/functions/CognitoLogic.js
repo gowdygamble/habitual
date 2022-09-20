@@ -1,4 +1,8 @@
-import {CognitoUserPool} from 'amazon-cognito-identity-js';
+import {
+    CognitoUserPool,
+    AuthenticationDetails,
+    CognitoUser
+} from 'amazon-cognito-identity-js';
 
 const POOL_DATA = {
     UserPoolId: 'us-west-1_gmOHe0HWR',
@@ -6,6 +10,15 @@ const POOL_DATA = {
 }
 
 const userPool = new CognitoUserPool(POOL_DATA);
+
+export const GetAuthenticatedUser = () => {
+    return userPool.getCurrentUser()
+}
+
+export const logout = () => {
+    GetAuthenticatedUser().signOut();
+    console.log("logged out")
+}    
 
 export const SignUpUser = (username, password) => {
     const attributeList = [];
@@ -21,3 +34,30 @@ export const SignUpUser = (username, password) => {
         console.log('user name is ' + cognitoUser.getUsername());
     });
 }
+
+export const LoginUser = (username, password) => {
+    var authenticationData = {
+        Username: username,
+        Password: password,
+    };
+    var authenticationDetails = new AuthenticationDetails(
+        authenticationData
+    );
+
+    var userData = {
+        Username: username,
+        Pool: userPool,
+    };
+
+    var cognitoUser = new CognitoUser(userData);
+
+    cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess(result) {
+            console.log(result)
+        },
+        onFailure(err) {
+            console.log(err)
+        }
+    })
+
+};

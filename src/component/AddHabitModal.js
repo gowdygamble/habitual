@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
-import styled from 'styled-components'
+import styled, { isStyledComponent } from 'styled-components'
 import {db} from '../firebase'
 import {collection, addDoc, Timestamp} from 'firebase/firestore'
+
+import { CustomForm, CustomButton, CustomTextInput} from './StyleComponents';
 
 const Modal = styled.div`
     position: fixed;
@@ -14,33 +16,6 @@ const Modal = styled.div`
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-`
-
-const CustomForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-`
-
-const CustomTextInput = styled.input`
-  margin-right: 10px;
-  font-size: 20px;
-  border: 2px solid grey;
-  border-radius: 3px;
-  width: 400px;
-  height: 40px;
-  text-align: center;
-`
-
-const CustomButton = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid black;
-  color: black;
-  margin: 8px 1em;
-  padding: 0.25em 1em;
 `
 
 function AddHabitModal(props) {
