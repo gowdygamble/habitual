@@ -64,17 +64,9 @@ function NavHeader() {
   const username = useSelector((state) => state.auth.username)
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const user = GetAuthenticatedUser();
-  //   if (user) {
-  //     setLoggedIn(true)
-  //   }
-  // }, [])
-
+  
   const logoutHandler = () => {
     logout()
-    //setLoggedIn(false)
     dispatch(authActions.signOut())
     navigate("/login")
   }
@@ -83,7 +75,7 @@ function NavHeader() {
     <NavHeaderStyled>
         <TitleContainer>
             <h1>habitual</h1>
-            {username && <h1>{username}</h1>}
+            {username && <h3>{username}</h3>}
             {authenticated && (<NavContainer>
               <StyledLink to="/today">Today</StyledLink> 
               <StyledLink to="/current-habits">Current Habits</StyledLink>

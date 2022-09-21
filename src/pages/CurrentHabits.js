@@ -3,6 +3,7 @@ import { PageContainer } from '../component/StyleComponents';
 import styled from 'styled-components';
 import {collection, query, onSnapshot} from "firebase/firestore"
 import {db} from '../firebase'
+import { useSelector } from 'react-redux';
 
 import HabitCategoryBlock from '../component/HabitCategoryBlock';
 import DaySpecificCategoryBlock from '../component/DaySpecificCategoryBlock';
@@ -27,6 +28,7 @@ const CurrentColumn = styled.div`
 
 
 function CurrentHabits() {
+  const authenticated = useSelector((state) => state.auth.authenticated)
 
     const [habits, setHabits] = useState([])
     const [categories, setCategories] = useState([])
@@ -80,7 +82,14 @@ function CurrentHabits() {
     //console.log(habitsByCategory)
     
     return (
-      <PageContainer>
+      <div>
+        {!authenticated && (
+          <PageContainer>
+            <h2>Log in to see your current habits</h2>
+          </PageContainer>
+        )}
+        {authenticated && (
+          <PageContainer>
           <h2>Current Habits</h2>
           <CurrentHabitsColumns>
 
@@ -111,6 +120,9 @@ function CurrentHabits() {
             
           </CurrentHabitsColumns>
       </PageContainer>
+        )}
+      </div>
+      
   )
 }
 

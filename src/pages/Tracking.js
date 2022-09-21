@@ -2,11 +2,13 @@ import React, {useState, useEffect} from 'react'
 import { PageContainer } from '../component/StyleComponents'
 import {db} from '../firebase'
 import {collection, query, onSnapshot, doc,  getDocs, updateDoc} from "firebase/firestore"
+import { useSelector } from 'react-redux';
 
 import HabitCard from '../component/HabitCard'
 import EditStatusSegment from '../component/EditStatusSegment'
 
 function Tracking() {
+  const authenticated = useSelector((state) => state.auth.authenticated)
 
   const [days, setDays] = useState([]);
   const [weeks, setWeeks] = useState([]);
@@ -51,8 +53,14 @@ function Tracking() {
 
   
 
-  return (
-    <PageContainer>
+  return ( <div>
+    {!authenticated && (
+          <PageContainer>
+            <h2>Log in to see your habit tracking</h2>
+          </PageContainer>
+        )}
+    {authenticated && (
+      <PageContainer>
       <h2>Tracking</h2>
       <div style={{display:'flex', 
       flexDirection:'column', 
@@ -103,7 +111,8 @@ function Tracking() {
       
       </div>
     </PageContainer>
-  )
+    )}
+  </div>);
 }
 
 export default Tracking

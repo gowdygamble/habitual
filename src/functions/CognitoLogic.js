@@ -4,10 +4,6 @@ import {
     CognitoUser
 } from 'amazon-cognito-identity-js';
 
-
-
-
-
 const POOL_DATA = {
     UserPoolId: 'us-west-1_gmOHe0HWR',
 	ClientId: '62jg669ceo17n1dan9e7propqc', 

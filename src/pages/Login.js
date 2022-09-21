@@ -37,23 +37,10 @@ function Login() {
       event.preventDefault();
       
       const loginResult = await LoginUser(username, password, dispatchLogin)
-      // console.log("loginResult ", loginResult)
-      // if (loginResult === "success") {
-      //   console.log("dispatching login action to redux")
-      //   dispatch(authActions.signIn({username: username}))
-      //   navigate("/today");
-      // }
-      
 
       setUsername('');
       setPassword('');
   }
-
-  const LogoutHandler = (event) => {
-    event.preventDefault()
-    logout();
-  }
-
 
   return (
     <PageContainer>
@@ -72,7 +59,6 @@ function Login() {
           </FormFieldContainer>
           <CustomButton>Login</CustomButton>
         </SignUpCustomForm>
-        <CustomButton onClick={LogoutHandler}>Logout</CustomButton>
         </PageContainer>
   )
 }

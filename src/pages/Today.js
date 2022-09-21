@@ -4,6 +4,7 @@ import {db} from '../firebase'
 import { PageContainer } from '../component/StyleComponents';
 import TodayCategoryBlock from '../component/TodayCategoryBlock';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -75,6 +76,7 @@ function Today() {
   const [dayId, setDayId] = useState('');
   const [categories, setCategories] = useState([]);
   const [habitsByCategory, setHabitsByCategory] = useState({})
+  const authenticated = useSelector((state) => state.auth.authenticated)
 
   var d = new Date();
   const ds = d.toDateString();
@@ -171,7 +173,13 @@ function Today() {
   }
   
   return (
-    <PageContainer>
+    <div>
+      {!authenticated && (
+          <PageContainer>
+            <h2>Log in to see today's habits</h2>
+          </PageContainer>
+        )}
+      {authenticated && ( <PageContainer>
       <TitleRow>
         <h2 style={{marginRight:20}}>{ds}</h2>
         <RefreshIcon onClick={refreshTodayHabits} />
@@ -194,8 +202,9 @@ function Today() {
                 />
             )
       })}
-    </PageContainer>
-  )
+      </PageContainer>)}
+    </div>
+  );
 }
 
 export default Today
