@@ -8,8 +8,6 @@ import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
-import { GetAuthenticatedUser } from '../functions/CognitoLogic';
-
 const TitleRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -83,6 +81,7 @@ function Today() {
   const dayCode = ds.split(/(\s+)/)[0];
 
   useEffect(() => {
+    // want to move this out of component into helper file
     const q = query(collection(db, 'categories'))
     onSnapshot(q, (querySnapshot) => {
 
@@ -91,17 +90,11 @@ function Today() {
         order: doc.data().order,
       }));
       h.sort((a, b) => parseInt(a.order) - parseInt(b.order))
-
       setCategories(h)
-
-      
     })
+    
+      
   },[])
-
-  useEffect(() => {
-    const user = GetAuthenticatedUser();
-    console.log(user)
-  }, [])
 
   const getDayHabits = async () => {
     const q = query(collection(db, 'days'), where("datestring", "==", ds))

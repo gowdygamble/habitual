@@ -75,7 +75,6 @@ function NavHeader() {
     <NavHeaderStyled>
         <TitleContainer>
             <h1>habitual</h1>
-            {username && <h3>{username}</h3>}
             {authenticated && (<NavContainer>
               <StyledLink to="/today">Today</StyledLink> 
               <StyledLink to="/current-habits">Current Habits</StyledLink>
