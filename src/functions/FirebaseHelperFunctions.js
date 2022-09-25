@@ -18,7 +18,9 @@ export const HandleStatusSwap = async (habitA, habitB) => {
     await setDoc(doc(db, "habits", habitB.id), {order: habitA.order}, {merge:true});
 };
 
-const getCategories = () => {};
+export const getCategories = () => {
+    
+};
 
 const getTodayHabits = () => {};
 
