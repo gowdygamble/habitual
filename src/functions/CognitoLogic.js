@@ -12,6 +12,7 @@ const POOL_DATA = {
 const userPool = new CognitoUserPool(POOL_DATA);
 
 export const GetAuthenticatedUser = () => {
+    // should do error check here
     return userPool.getCurrentUser()
 }
 
