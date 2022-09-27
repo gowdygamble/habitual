@@ -1,3 +1,5 @@
+[] redo nosql schema, users-> days, habits, etc.
+    could have everything grow from user objects?
 
 [] seperate backend from front end:
     all frontend pieces should just expect a list of habits or days or whatever, all the database calls should be done in a seperate
