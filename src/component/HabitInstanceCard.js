@@ -5,6 +5,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from '@mui/icons-material/Cancel';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
+// move this to central style doc
 const HabitCard = styled.div`
     border: 2px solid grey;
     border-radius: 3px;
