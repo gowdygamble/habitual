@@ -25,7 +25,7 @@ function SignUp() {
 
     const SignUpSubmitHandler = (event) => {
         event.preventDefault();
-        //console.log(username, password)
+        console.log(username, password)
         SignUpUser(username, password);
         setUsername('');
         setPassword('');
