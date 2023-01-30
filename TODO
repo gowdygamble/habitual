@@ -1,3 +1,6 @@
+[] switch over to prebaked UI, just pick one library and master it
+[] fix login, fix schema -> make it generally useable
+
 [] redo nosql schema, users-> days, habits, etc.
     could have everything grow from user objects?
 
